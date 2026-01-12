@@ -240,8 +240,7 @@
 					if (pzpr.env.node) {
 						url = "http://pzv.jp/p.html";
 					} else {
-						url =
-							location.protocol + "//" + location.host + location.pathname;
+						url = location.protocol + "//" + location.host + location.pathname;
 					}
 					url = url + "?";
 					break;

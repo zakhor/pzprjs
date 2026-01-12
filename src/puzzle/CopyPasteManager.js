@@ -47,26 +47,26 @@ pzpr.classmgr.makeCommon({
 			var svgRect = svg.getBoundingClientRect();
 			var parentRect = parent.getBoundingClientRect();
 
-			var overlay = document.createElement('canvas');
+			var overlay = document.createElement("canvas");
 			// Set canvas size to match SVG layout size (CSS pixels) and account for devicePixelRatio
 			var dpr = window.devicePixelRatio || 1;
 			var cssW = svgRect.width;
 			var cssH = svgRect.height;
 			overlay.width = Math.max(1, Math.round(cssW * dpr));
 			overlay.height = Math.max(1, Math.round(cssH * dpr));
-			overlay.style.width = cssW + 'px';
-			overlay.style.height = cssH + 'px';
-			overlay.style.position = 'absolute';
+			overlay.style.width = cssW + "px";
+			overlay.style.height = cssH + "px";
+			overlay.style.position = "absolute";
 			// SVGの位置に合わせる（親要素からの相対位置）
-			overlay.style.left = (svgRect.left - parentRect.left) + 'px';
-			overlay.style.top = (svgRect.top - parentRect.top) + 'px';
-			overlay.style.pointerEvents = 'none';
-			overlay.style.display = 'none';
-			overlay.style.zIndex = '1000';
+			overlay.style.left = svgRect.left - parentRect.left + "px";
+			overlay.style.top = svgRect.top - parentRect.top + "px";
+			overlay.style.pointerEvents = "none";
+			overlay.style.display = "none";
+			overlay.style.zIndex = "1000";
 			// store dpr for drawing routines
 			overlay._dpr = dpr;
 			// ensure crisp drawing on high-DPI displays
-			var ctx = overlay.getContext('2d');
+			var ctx = overlay.getContext("2d");
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			parent.appendChild(overlay);
 			this.overlayCanvas = overlay;
@@ -88,23 +88,33 @@ pzpr.classmgr.makeCommon({
 			var svgRect = svg.getBoundingClientRect();
 			var parentRect = parent.getBoundingClientRect();
 			var dpr = window.devicePixelRatio || 1;
-			var cssW = svgRect.width || parseInt(svg.getAttribute('width')) || parent.clientWidth;
-			var cssH = svgRect.height || parseInt(svg.getAttribute('height')) || parent.clientHeight;
+			var cssW =
+				svgRect.width ||
+				parseInt(svg.getAttribute("width")) ||
+				parent.clientWidth;
+			var cssH =
+				svgRect.height ||
+				parseInt(svg.getAttribute("height")) ||
+				parent.clientHeight;
 
 			// update style position
-			overlay.style.left = (svgRect.left - parentRect.left) + 'px';
-			overlay.style.top = (svgRect.top - parentRect.top) + 'px';
-			overlay.style.width = cssW + 'px';
-			overlay.style.height = cssH + 'px';
+			overlay.style.left = svgRect.left - parentRect.left + "px";
+			overlay.style.top = svgRect.top - parentRect.top + "px";
+			overlay.style.width = cssW + "px";
+			overlay.style.height = cssH + "px";
 
 			// update backing store size if changed
 			var intW = Math.max(1, Math.round(cssW * dpr));
 			var intH = Math.max(1, Math.round(cssH * dpr));
-			if (overlay.width !== intW || overlay.height !== intH || overlay._dpr !== dpr) {
+			if (
+				overlay.width !== intW ||
+				overlay.height !== intH ||
+				overlay._dpr !== dpr
+			) {
 				overlay.width = intW;
 				overlay.height = intH;
 				overlay._dpr = dpr;
-				var ctx = overlay.getContext('2d');
+				var ctx = overlay.getContext("2d");
 				ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			}
 		},
@@ -125,7 +135,7 @@ pzpr.classmgr.makeCommon({
 				// console.log('Hooked mousedown, mode:', manager.mode);
 
 				// コピーモード中は我々の処理を優先
-				if (manager.mode === 'selecting') {
+				if (manager.mode === "selecting") {
 					// console.log('Copy mode active, intercepting click');
 					e.preventDefault();
 					e.stopPropagation();
@@ -134,7 +144,7 @@ pzpr.classmgr.makeCommon({
 				}
 
 				// ペーストモード中もクリックで確定
-				if (manager.mode === 'pasting') {
+				if (manager.mode === "pasting") {
 					// console.log('Paste mode active, confirming paste');
 					e.preventDefault();
 					e.stopPropagation();
@@ -155,11 +165,15 @@ pzpr.classmgr.makeCommon({
 
 			// SVG要素に直接mousemoveイベントを追加（ペーストプレビュー用）
 			var svg = puzzle.painter.context.canvas;
-			svg.addEventListener('mousemove', function(e) {
-				if (manager.mode === 'pasting') {
-					manager.updatePastePreview(e);
-				}
-			}, false);
+			svg.addEventListener(
+				"mousemove",
+				function(e) {
+					if (manager.mode === "pasting") {
+						manager.updatePastePreview(e);
+					}
+				},
+				false
+			);
 
 			// console.log('Mouse events hooked successfully');
 		},
@@ -171,9 +185,9 @@ pzpr.classmgr.makeCommon({
 			var manager = this;
 
 			// コピーボタン
-			var btnCopy = document.getElementById('btn_copy');
+			var btnCopy = document.getElementById("btn_copy");
 			if (btnCopy) {
-				btnCopy.addEventListener('click', function(e) {
+				btnCopy.addEventListener("click", function(e) {
 					e.preventDefault();
 					e.stopPropagation();
 					manager.startCopyMode();
@@ -181,9 +195,9 @@ pzpr.classmgr.makeCommon({
 			}
 
 			// ペーストボタン
-			var btnPaste = document.getElementById('btn_paste');
+			var btnPaste = document.getElementById("btn_paste");
 			if (btnPaste) {
-				btnPaste.addEventListener('click', function(e) {
+				btnPaste.addEventListener("click", function(e) {
 					e.preventDefault();
 					e.stopPropagation();
 					manager.startPasteMode();
@@ -191,9 +205,9 @@ pzpr.classmgr.makeCommon({
 			}
 
 			// 回転(90度)ボタン
-			var btnRotate = document.getElementById('btn_rotate90');
+			var btnRotate = document.getElementById("btn_rotate90");
 			if (btnRotate) {
-				btnRotate.addEventListener('click', function(e) {
+				btnRotate.addEventListener("click", function(e) {
 					e.preventDefault();
 					e.stopPropagation();
 					manager.rotate90Toggle();
@@ -201,9 +215,9 @@ pzpr.classmgr.makeCommon({
 			}
 
 			// 左右反転ボタン
-			var btnFlip = document.getElementById('btn_fliph');
+			var btnFlip = document.getElementById("btn_fliph");
 			if (btnFlip) {
-				btnFlip.addEventListener('click', function(e) {
+				btnFlip.addEventListener("click", function(e) {
 					e.preventDefault();
 					e.stopPropagation();
 					manager.flipHToggle();
@@ -218,13 +232,16 @@ pzpr.classmgr.makeCommon({
 		//---------------------------------------------------------------------------
 		attachResizeListener: function() {
 			var manager = this;
-			this.puzzle.on('resize', function() {
+			this.puzzle.on("resize", function() {
 				// 常にcanvasサイズ・位置を最新化（リサイズ時の選択範囲描画問題を解決）
 				manager._updateOverlaySizePos();
 
 				// 選択範囲が表示されている場合は再描画
-				if (manager.overlayCanvas && manager.overlayCanvas.style.display !== 'none') {
-					if (manager.mode === 'pasting') {
+				if (
+					manager.overlayCanvas &&
+					manager.overlayCanvas.style.display !== "none"
+				) {
+					if (manager.mode === "pasting") {
 						manager.drawPastePreview();
 					} else if (manager.startCell) {
 						manager.drawSelectionOverlay();
@@ -269,7 +286,7 @@ pzpr.classmgr.makeCommon({
 				// 2番目のセルを選択してコピー実行
 				this.endCell = { bx: pos.bx, by: pos.by };
 				// console.log('Second cell selected:', pos.bx, pos.by);
-				this.drawSelectionOverlay();  // 範囲を表示
+				this.drawSelectionOverlay(); // 範囲を表示
 				this.executeCopy();
 				// コピー完了後、範囲は表示したままにする（次の操作で自動的に消える）
 				this.mode = null;
@@ -284,10 +301,10 @@ pzpr.classmgr.makeCommon({
 			if (!this.initialized) {
 				return;
 			}
-			this.mode = 'selecting';
+			this.mode = "selecting";
 			this.startCell = null;
 			this.endCell = null;
-			this.hideSelectionOverlay();  // 前回のコピー範囲を消す
+			this.hideSelectionOverlay(); // 前回のコピー範囲を消す
 			this.updateButtonState();
 		},
 
@@ -349,11 +366,11 @@ pzpr.classmgr.makeCommon({
 				return;
 			}
 
-			this.mode = 'pasting';
+			this.mode = "pasting";
 			this.pastePreviewPos = null;
-			this.startCell = null;  // コピー範囲をクリア
+			this.startCell = null; // コピー範囲をクリア
 			this.endCell = null;
-			this.hideSelectionOverlay();  // コピー範囲の表示を消す
+			this.hideSelectionOverlay(); // コピー範囲の表示を消す
 			this.updateButtonState();
 			// console.log('Paste mode: Move mouse to preview, click to confirm');
 		},
@@ -438,9 +455,9 @@ pzpr.classmgr.makeCommon({
 			}
 			// Ensure overlay matches SVG size/position
 			this._updateOverlaySizePos();
-			overlay.style.display = 'block';
+			overlay.style.display = "block";
 
-			var ctx = overlay.getContext('2d');
+			var ctx = overlay.getContext("2d");
 			var dpr = overlay._dpr || 1;
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			ctx.clearRect(0, 0, overlay.width / dpr, overlay.height / dpr);
@@ -459,9 +476,9 @@ pzpr.classmgr.makeCommon({
 				var by2 = Math.max(this.startCell.by, this.endCell.by);
 
 				// セル中心(奇数)から左上の罫線交点(偶数)と右下の罫線交点(偶数)を計算
-				var cornerBx1 = bx1 - 1;  // 左上角
+				var cornerBx1 = bx1 - 1; // 左上角
 				var cornerBy1 = by1 - 1;
-				var cornerBx2 = bx2 + 1;  // 右下角
+				var cornerBx2 = bx2 + 1; // 右下角
 				var cornerBy2 = by2 + 1;
 
 				// ボード座標からピクセル座標に変換
@@ -470,10 +487,10 @@ pzpr.classmgr.makeCommon({
 				var px2 = x0 + cornerBx2 * bw;
 				var py2 = y0 + cornerBy2 * bh;
 
-				ctx.fillStyle = 'rgba(0, 120, 215, 0.2)';
+				ctx.fillStyle = "rgba(0, 120, 215, 0.2)";
 				ctx.fillRect(px1, py1, px2 - px1, py2 - py1);
 
-				ctx.strokeStyle = 'rgba(0, 120, 215, 0.8)';
+				ctx.strokeStyle = "rgba(0, 120, 215, 0.8)";
 				ctx.lineWidth = 2;
 				ctx.strokeRect(px1, py1, px2 - px1, py2 - py1);
 			} else {
@@ -488,7 +505,7 @@ pzpr.classmgr.makeCommon({
 				var px2 = x0 + cornerBx2 * bw;
 				var py2 = y0 + cornerBy2 * bh;
 
-				ctx.strokeStyle = 'rgba(0, 120, 215, 0.8)';
+				ctx.strokeStyle = "rgba(0, 120, 215, 0.8)";
 				ctx.lineWidth = 2;
 				ctx.strokeRect(px1, py1, px2 - px1, py2 - py1);
 			}
@@ -507,9 +524,9 @@ pzpr.classmgr.makeCommon({
 				return;
 			}
 			this._updateOverlaySizePos();
-			overlay.style.display = 'block';
+			overlay.style.display = "block";
 
-			var ctx = overlay.getContext('2d');
+			var ctx = overlay.getContext("2d");
 			var dpr = overlay._dpr || 1;
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			ctx.clearRect(0, 0, overlay.width / dpr, overlay.height / dpr);
@@ -541,13 +558,13 @@ pzpr.classmgr.makeCommon({
 			var py2 = y0 + cornerBy2 * bh;
 
 			// 薄青色の半透明塗りつぶし
-			ctx.fillStyle = 'rgba(135, 206, 235, 0.3)';
+			ctx.fillStyle = "rgba(135, 206, 235, 0.3)";
 			ctx.fillRect(px1, py1, px2 - px1, py2 - py1);
 
 			this.drawPasteGhostData(ctx, data, bx, by);
 
 			// 青い枠線
-			ctx.strokeStyle = 'rgba(0, 120, 215, 0.8)';
+			ctx.strokeStyle = "rgba(0, 120, 215, 0.8)";
 			ctx.lineWidth = 2;
 			ctx.strokeRect(px1, py1, px2 - px1, py2 - py1);
 		},
@@ -557,11 +574,16 @@ pzpr.classmgr.makeCommon({
 		//---------------------------------------------------------------------------
 		hideSelectionOverlay: function() {
 			if (this.overlayCanvas) {
-				this.overlayCanvas.style.display = 'none';
-				var ctx = this.overlayCanvas.getContext('2d');
+				this.overlayCanvas.style.display = "none";
+				var ctx = this.overlayCanvas.getContext("2d");
 				var dpr = this.overlayCanvas._dpr || 1;
 				ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-				ctx.clearRect(0, 0, this.overlayCanvas.width / dpr, this.overlayCanvas.height / dpr);
+				ctx.clearRect(
+					0,
+					0,
+					this.overlayCanvas.width / dpr,
+					this.overlayCanvas.height / dpr
+				);
 			}
 		},
 
@@ -569,40 +591,40 @@ pzpr.classmgr.makeCommon({
 		// manager.updateButtonState() ボタンの表示状態を更新する
 		//---------------------------------------------------------------------------
 		updateButtonState: function() {
-			var btnCopy = document.getElementById('btn_copy');
-			var btnPaste = document.getElementById('btn_paste');
-			var btnRotate = document.getElementById('btn_rotate90');
-			var btnFlip = document.getElementById('btn_fliph');
+			var btnCopy = document.getElementById("btn_copy");
+			var btnPaste = document.getElementById("btn_paste");
+			var btnRotate = document.getElementById("btn_rotate90");
+			var btnFlip = document.getElementById("btn_fliph");
 
 			if (btnCopy) {
-				if (this.mode === 'selecting') {
-					btnCopy.classList.add('active');
+				if (this.mode === "selecting") {
+					btnCopy.classList.add("active");
 				} else {
-					btnCopy.classList.remove('active');
+					btnCopy.classList.remove("active");
 				}
 			}
 
 			if (btnPaste) {
-				if (this.mode === 'pasting') {
-					btnPaste.classList.add('active');
+				if (this.mode === "pasting") {
+					btnPaste.classList.add("active");
 				} else {
-					btnPaste.classList.remove('active');
+					btnPaste.classList.remove("active");
 				}
 			}
 
 			if (btnRotate) {
 				if (this.rotateStep !== 0) {
-					btnRotate.classList.add('active');
+					btnRotate.classList.add("active");
 				} else {
-					btnRotate.classList.remove('active');
+					btnRotate.classList.remove("active");
 				}
 			}
 
 			if (btnFlip) {
 				if (this.flipH) {
-					btnFlip.classList.add('active');
+					btnFlip.classList.add("active");
 				} else {
-					btnFlip.classList.remove('active');
+					btnFlip.classList.remove("active");
 				}
 			}
 		},
@@ -615,7 +637,7 @@ pzpr.classmgr.makeCommon({
 				return;
 			}
 			this.rotateStep = (this.rotateStep + 1) % 4;
-			if (this.mode === 'pasting') {
+			if (this.mode === "pasting") {
 				this.drawPastePreview();
 			}
 			this.updateButtonState();
@@ -629,7 +651,7 @@ pzpr.classmgr.makeCommon({
 				return;
 			}
 			this.flipH = !this.flipH;
-			if (this.mode === 'pasting') {
+			if (this.mode === "pasting") {
 				this.drawPastePreview();
 			}
 			this.updateButtonState();
@@ -698,12 +720,12 @@ pzpr.classmgr.makeCommon({
 			var cellW = bw * 2;
 			var cellH = bh * 2;
 			var fontSize = Math.max(10, Math.floor(Math.min(cellW, cellH) * 0.6));
-			var isLightup = this.puzzle.pid === 'lightup';
+			var isLightup = this.puzzle.pid === "lightup";
 
 			ctx.save();
-			ctx.textAlign = 'center';
-			ctx.textBaseline = 'middle';
-			ctx.font = fontSize + 'px sans-serif';
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.font = fontSize + "px sans-serif";
 
 			for (var dy = 0; dy < data.length; dy++) {
 				var row = data[dy];
@@ -718,15 +740,15 @@ pzpr.classmgr.makeCommon({
 					var py1 = y0 + (cellBy - 1) * bh;
 
 					if (isLightup) {
-						ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+						ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
 						ctx.fillRect(px1, py1, cellW, cellH);
 					}
 
 					if (val >= 0) {
 						var text = String(val);
 						ctx.fillStyle = isLightup
-							? 'rgba(255, 255, 255, 0.7)'
-							: 'rgba(0, 0, 0, 0.6)';
+							? "rgba(255, 255, 255, 0.7)"
+							: "rgba(0, 0, 0, 0.6)";
 						ctx.fillText(text, x0 + cellBx * bw, y0 + cellBy * bh);
 					}
 				}
