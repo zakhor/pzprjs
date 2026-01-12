@@ -25,6 +25,7 @@ exports.files = [
 	"puzzle/Graphic",
 	"puzzle/MouseInput",
 	"puzzle/KeyInput",
+	"puzzle/CopyPasteManager",
 	"puzzle/Encode",
 	"puzzle/FileData",
 	"puzzle/Answer",

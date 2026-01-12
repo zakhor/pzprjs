@@ -478,6 +478,8 @@
 		puzzle.opemgr = new classes.OperationManager(); // 操作情報管理オブジェクト
 
 		puzzle.faillist = new classes.FailCode(); // 正答判定文字列を保持するオブジェクト
+
+		puzzle.copyPasteManager = new classes.CopyPasteManager(); // コピー&ペースト管理オブジェクト
 	}
 
 	//---------------------------------------------------------------------------
@@ -546,6 +548,11 @@
 		}
 
 		pc.initCanvas();
+
+		// CopyPasteManagerの初期化
+		if (puzzle.copyPasteManager) {
+			puzzle.copyPasteManager.setupCanvas();
+		}
 	}
 
 	//---------------------------------------------------------------------------

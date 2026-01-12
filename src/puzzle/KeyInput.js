@@ -134,7 +134,10 @@ pzpr.classmgr.makeCommon({
 				key = "left";
 			} else if (keycode === 39) {
 				key = "right";
-			} else if (48 <= keycode && keycode <= 57) {
+			} else if (keycode === 27) {
+				key = "Esc";
+			} // 27はEscキー
+			else if (48 <= keycode && keycode <= 57) {
 				key = (keycode - 48).toString(36);
 			} else if (65 <= keycode && keycode <= 90) {
 				key = (keycode - 55).toString(36);
@@ -261,6 +264,49 @@ pzpr.classmgr.makeCommon({
 					puzzle.playmode ? puzzle.MODE_EDITOR : puzzle.MODE_PLAYER
 				);
 				return false;
+			}
+			// コピー&ペースト機能
+			if (puzzle.copyPasteManager) {
+				if (this.keydown && c === "c" && !this.isCTRL && !this.isMETA) {
+					puzzle.copyPasteManager.startCopyMode();
+					return false;
+				}
+				if (this.keydown && c === "v" && !this.isCTRL && !this.isMETA) {
+					puzzle.copyPasteManager.startPasteMode();
+					return false;
+				}
+				if (
+					this.keydown &&
+					c === "r" &&
+					!this.isCTRL &&
+					!this.isMETA &&
+					puzzle.copyPasteManager.mode === "pasting"
+				) {
+					puzzle.copyPasteManager.rotate90Toggle();
+					return false;
+				}
+				if (
+					this.keydown &&
+					c === "f" &&
+					!this.isCTRL &&
+					!this.isMETA &&
+					puzzle.copyPasteManager.mode === "pasting"
+				) {
+					puzzle.copyPasteManager.flipHToggle();
+					return false;
+				}
+				if (this.keydown && c === "Esc") {
+					var mgr = puzzle.copyPasteManager;
+					// モード中ならキャンセル、通常モードなら範囲表示を消す
+					if (mgr.mode !== null) {
+						mgr.cancelCopyMode();
+					} else if (mgr.startCell || mgr.endCell) {
+						mgr.hideSelectionOverlay();
+						mgr.startCell = null;
+						mgr.endCell = null;
+					}
+					return false;
+				}
 			}
 			return true;
 		},
