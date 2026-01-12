@@ -265,8 +265,8 @@ pzpr.classmgr.makeCommon({
 				);
 				return false;
 			}
-			// コピー&ペースト機能
-			if (puzzle.copyPasteManager) {
+			// コピー&ペースト機能はlightupのみ
+			if (puzzle.copyPasteManager && puzzle.pid === "lightup") {
 				if (this.keydown && c === "c" && !this.isCTRL && !this.isMETA) {
 					puzzle.copyPasteManager.startCopyMode();
 					return false;
