@@ -162,7 +162,7 @@ ui.debug.addDebugData("kouchoku", {
 				"mouse,left, 8,4, 6,0"
 			],
 			result:
-				"pzprv3/kouchoku/3/4/1 . . . . /. . . . . /. . . . 4 /5 . . . . /1/0 0 8 4/"
+				"pzprv3/kouchoku/3/4/1 . . 3 . /. . . . . /. . . . 4 /5 . . . . /2/0 0 8 4/0 6 6 0/"
 		}
 	]
 });
