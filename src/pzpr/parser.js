@@ -225,7 +225,9 @@
 			}
 			switch (this.type) {
 				case URL_PZPRV3:
-					url = "https://puzz.link/p?%PID%/";
+					url = pzpr.env.node
+						? "http://pzv.jp/p.html?%PID%/"
+						: "https://puzz.link/p?%PID%/";
 					break;
 				case URL_KANPEN:
 					url = "http://www.kanpen.net/%KID%.html?problem=";
