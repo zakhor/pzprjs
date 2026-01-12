@@ -13,7 +13,14 @@ ui.misc = {
 		var pid = ui.puzzle.pid;
 		var pinfo = pzpr.variety(pid);
 		var title = ui.selectStr(pinfo.ja, pinfo.en);
-		title += ui.puzzle.playeronly ? " player" : " " + ui.i18n("editor");
+		if (pid === "lightup" && !ui.puzzle.playeronly) {
+			var editorLabel = ui.selectStr("エディタ", "editor");
+			var spacer = ui.selectStr("", " ");
+			var suffix = ui.selectStr("（コピペ機能付き）", " (with copy-paste)");
+			title = title + spacer + editorLabel + suffix;
+		} else {
+			title += ui.puzzle.playeronly ? " player" : " " + ui.i18n("editor");
+		}
 
 		_doc.title = title;
 		var titleEL = _doc.getElementById("title2");

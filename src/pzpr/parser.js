@@ -216,14 +216,16 @@
 		//---------------------------------------------------------------------------
 		outputURLType: function() {
 			var url = "";
-			if (pzpr.env.node) {
-				url = "http://pzv.jp/p.html";
-			} else {
-				url = location.protocol + "//" + location.host + location.pathname;
+			if (this.type !== URL_PZPRV3) {
+				if (pzpr.env.node) {
+					url = "http://pzv.jp/p.html";
+				} else {
+					url = location.protocol + "//" + location.host + location.pathname;
+				}
 			}
 			switch (this.type) {
 				case URL_PZPRV3:
-					url = url + "?%PID%/";
+					url = "https://puzz.link/p?%PID%/";
 					break;
 				case URL_KANPEN:
 					url = "http://www.kanpen.net/%KID%.html?problem=";
@@ -235,6 +237,12 @@
 					url = "http://www.geocities.co.jp/heyawake/?problem=";
 					break;
 				case URL_PZPRFILE:
+					if (pzpr.env.node) {
+						url = "http://pzv.jp/p.html";
+					} else {
+						url =
+							location.protocol + "//" + location.host + location.pathname;
+					}
 					url = url + "?";
 					break;
 			}
